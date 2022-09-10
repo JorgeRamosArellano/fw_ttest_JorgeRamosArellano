@@ -1,3 +1,3 @@
-# Dirigjase a la rama ioy_solution_JOrgeRamosArellano.
+# Dirigjase a la rama ioy_solution_JorgeRamosArellano.
 
 - fw_ttest_JorgeRamosArellano
