@@ -11,9 +11,9 @@ class LocalTime:
         self.rtc = RTC()
 
     def setRTCWithLocalTime(self):
-        ntptime.settime()# set the rtc datetime from the remote server
+        ntptime.settime()# set el rtc datetime del ESP32 desde el servidor remoto de NTP. La hora que obtiene de NTP es UTC + 0 
         year, month, day, weekday, hour, minute, seconds, m_seconds = list(self.rtc.datetime())
-        self.rtc.init((year, month, day, weekday, (hour -5), minute, seconds, m_seconds))
+        self.rtc.init((year, month, day, weekday, (hour -5), minute, seconds, m_seconds))#Colombia es UTC-5, por eso se restan 5 horas
 
 
     @property

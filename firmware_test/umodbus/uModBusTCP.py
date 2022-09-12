@@ -2,8 +2,8 @@
 #This file has been modified and differ from its source version.
 
 
-import uModBusFunctions as functions
-import uModBusConst as Const
+import umodbus.uModBusFunctions as functions
+import umodbus.uModBusConst as Const
 import struct
 import socket
 import random

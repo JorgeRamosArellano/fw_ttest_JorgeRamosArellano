@@ -5,6 +5,8 @@ from measures import Measure
 import json
 from time import sleep, time
 
+from umodbus.uModBusTCP import uModBusTCP
+
 try:
     #---Connection WIFI----
     wifi_connect("Nada_Es_Gratis","Angelyjorge")
@@ -22,27 +24,33 @@ try:
     #---Measures SIEMENS PAC3200----
     def alert_event(payload):
         print('Alert Event is up')
-        print(payload)
+        #print(payload)
         client.publish('esp/measure/alert', json.dumps(payload))
 
-    measure = Measure()
+    measure = Measure(slave_ip = '192.168.100.13')#Config MODBUS/TCP tambien
     measure.set_callback(alert_event)
-except:
-    print('Ha ocurrido un error! Reintentando...')
+    
+    #measure44 = Measure(slave_ip = '192.168.100.44')#Config MODBUS/TCP 
+    #measure44.set_callback(alert_event)
+    
+except Exception as e:
+    print('Ha ocurrido un error! Reintentando...', e)
     sleep(2)
-    machine.reset()
+    machine.reset()#Resetea la ESP32 cuando hay un error en las conexiones anteriores
 
+
+#print('Conectado, MODBUS:', host)
 #---LOOP---
 anterior = time()
 while True:
-    client.check_msg()
-    if(time() - anterior == 5):
+    client.check_msg()#Chequear si llegó un mensaje a los topicos subscritos
+    if(time() - anterior == 5): #Cada 5 segs
         anterior = time()
-        client.publish('esp/measure/foundry', json.dumps(measure.foundry))
+        client.publish('esp/measure/foundry', json.dumps(measure.foundry))#Simulados randint()
         client.publish('esp/measure/molding', json.dumps(measure.molding))
         client.publish('esp/measure/pneumatic', json.dumps(measure.pneumatic))
         client.publish('esp/measure/warehouse', json.dumps(measure.warehouse))
-
+        client.publish('esp/measure/pac', json.dumps(measure.pac))#Simulacion PAC3200 - mbsSlave.exe
 
 
 

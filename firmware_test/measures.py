@@ -1,15 +1,22 @@
 from random import randint
 from ntp_server import LocalTime
 
+from umodbus.uModBusTCP import uModBusTCP
+
 
 class Measure:
 
 
-    def __init__(self):
+    def __init__(self, slave_ip):
         self._foundry = {}
         self._molding = {}
         self._pneumatic = {}
         self._warehouse = {}
+        self._pac = {}
+        self._host = None
+        #ModBusTCP Configuration
+        self._host = uModBusTCP(slave_ip = slave_ip, slave_port =502, timeout = 5)
+        print(self._host)
         #---callback alert---
         self.cb_alert = None
         #---limit danger measure--
@@ -81,6 +88,27 @@ class Measure:
     def molding(self):
         self._molding = self._get_measures('molding')
         return self._molding
+    
+    @property #Getter
+    def pac(self):
+        pac_tuple = self._host.read_holding_registers(slave_addr=1, starting_addr=1, register_qty=10, signed = True)
+        pac_list = list(pac_tuple)
+        self._pac = {
+        'procces area': 'PAC',
+        'fecha': self.local_time.fecha,
+        'hora': self.local_time.hora,
+        'voltaje L1-N': pac_list[0],
+        'voltaje L2-N': pac_list[1],
+        'voltaje L3-N': pac_list[2],
+        'current L1': pac_list[3],
+        'current L2': pac_list[4],
+        'current L3': pac_list[5],
+        'cumulative Energy imported' : pac_list[6],
+        'power Factor L1': pac_list[7],
+        'power Factor L2': pac_list[8],
+        'power Factor L3': pac_list[9]
+        }
+        return self._pac
 
     @property #Getter
     def pneumatic(self):

@@ -1,8 +1,8 @@
 #Source: https://github.com/pycom/pycom-modbus/tree/master/uModbus (2018-07-16)
 #This file has been modified and differ from its source version.
 
-import uModBusFunctions as functions
-import uModBusConst as Const
+import umodbus.uModBusFunctions as functions
+import umodbus.uModBusConst as Const
 from machine import UART
 from machine import Pin
 import struct

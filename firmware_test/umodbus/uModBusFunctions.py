@@ -1,6 +1,6 @@
 #Source: https://github.com/pycom/pycom-modbus/tree/master/uModbus (2018-07-16)
 
-import uModBusConst as Const
+import umodbus.uModBusConst as Const
 import struct
 
 def read_coils(starting_address, quantity):
